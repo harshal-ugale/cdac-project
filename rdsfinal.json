@@ -1,0 +1,62 @@
+{
+    "Resources": {
+        "MyDB": {
+            "Type": "AWS::RDS::DBInstance",
+            "Properties": {
+                "AllocatedStorage": "20",
+                "AvailabilityZone": "us-east-1a",
+                "DBInstanceClass": "db.m4.large",
+                "DBInstanceIdentifier":{"Ref": "DBInst"},
+                "DBName":{"Ref": "DBInst"},
+                "VPCSecurityGroups": [
+                    {
+                        "Fn::GetAtt": [
+                            "DBEC2SecurityGroup",
+                            "GroupId"
+                        ]
+                    }
+                ],
+                "DeleteAutomatedBackups": true,
+                "Engine": "MySQL",
+                "MasterUsername": {
+                    "Ref": "MasterUser"
+                },
+                "MasterUserPassword": {
+                    "Ref": "MasterPass"
+                },
+                "Port": "3306",
+                "PubliclyAccessible": true
+                
+            }
+        },
+        "DBEC2SecurityGroup": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupDescription": "Open database for access",
+                "SecurityGroupIngress": [
+                    {
+                        "IpProtocol": "tcp",
+                        "FromPort": "3306",
+                        "ToPort": "3306",
+						"CidrIp": "49.33.196.140/32"
+                       
+                    }
+                ]
+            }
+        }
+    },
+	"Parameters":{
+		"DBInst":{
+			"Description":"the instance name",
+			"Type":"String"
+		},
+		"MasterUser":{
+			"Description":"the master user name",
+			"Type":"String"
+		},
+		"MasterPass":{
+			"Description":"the master user name",
+			"Type":"String"
+		}	
+	}
+}
