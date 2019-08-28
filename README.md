@@ -1,2 +1,0 @@
-# cdac-project
-devops
